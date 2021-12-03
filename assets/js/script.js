@@ -39,23 +39,46 @@ function getCityForecast(event) {
         var requestFiveDayURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=${APIKey}`;
 
         
+        fetch(requestFiveDayURL)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+       
+            for(var i=0; i<5;) {
+                var fiveDayForecast = 
+                `<div class="col-2 card bg-light p-0 mx-3 mr-3 card-custom" style="max-width: 18rem;">
+                    <div class="card-header day">Header</div>
+                    <div class="card-body">
+                        <h5 class="card-title icon">Light card title</h5>
+                        <p class="card-text">Example text</p>
+                        <p class="card-text">Example text</p>
+                        <p class="card-text">Example text</p>
+                    </div>
+                </div>`
+                $("#five-days").append(fiveDayForecast);
+    
+            
+       
 
-        // fetch(requestFiveDayURL)
 
 
+        
+        
 
 
-        // Use the console to examine the response
-        console.log(data);
-        // TODO: Loop through the data and generate your HTML
-        // for(var i=0; i<data.length; i++) {
-        //   var newHTML = 
-        //   `<h1>${data[i].login}</h1>
-        //   <p>${data[i].html_url}</p>`
-  
-        //   $("#users").append(newHTML);
-        // }
-      });
+                // Use the console to examine the response
+                // TODO: Loop through the data and generate your HTML
+                // for(var i=0; i<data.length; i++) {
+                //   var newHTML = 
+                //   `<h1>${data[i].login}</h1>
+                //   <p>${data[i].html_url}</p>`
+        
+                //   $("#users").append(newHTML);
+                // }
+            };                       
+        });
+    });
+};
 
-  }
-  fetchButton.click(getCityForecast);
+fetchButton.click(getCityForecast);
