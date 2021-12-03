@@ -26,7 +26,7 @@ function getCityForecast(event) {
             <p class="card-text">Humidity: ${data.main.humidity}%</p>
             <p class="card-text">UV Index: ${data.weather[0].description}</p>
         </div>`
-        $("#weather-data").append(currentWeather)
+        $("#new-weather-data").append(currentWeather)
 
         var currentCity = 
         `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false">${data.name}</button>`
