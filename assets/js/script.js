@@ -17,14 +17,19 @@ function getCityForecast(event) {
     })
     .then(function (data) {
         var lastUpdated = moment.unix(data.dt).format("h:mm A")
+        console.log(data);
+        iconURL = `http://openweathermap.org/img/wn/${data.weather[0].icon}
+        @2x.png`;
         var currentWeather = 
         `<div class="ml-3 mb-5 p-4 card bg-light text-dark text-white d-block today-custom">
+            <img id="wicon" src="${iconURL}.png">
             <h5 class="card-title">${data.name}</h5>
             <h6 class="card-subtitle mb-3 text-muted">Last updated at ${lastUpdated} for ${today}</h6>
-            <p class="card-text">Temp: ${data.main.temp}</p>
+            <p class="card-text">Temp: ${data.main.temp} &#176F</p>
             <p class="card-text">Wind: ${data.wind.speed} MPH</p>
             <p class="card-text">Humidity: ${data.main.humidity}%</p>
-            <p class="card-text">UV Index: ${data.weather[0].description}</p>
+            <p style="display: inline" class="card-text">UV Index: </p>
+            <p id="uv-index" class="rounded text-light p-2" style="display: inline"></p>
         </div>`
         $("#new-weather-data").append(currentWeather)
 
@@ -43,7 +48,7 @@ function getCityForecast(event) {
             return response.json();
         })
         .then(function (data) {
-       
+            console.log(data);
             for(var i=0; i<5; i++) {
                 var fiveDayForecast = 
                 `<div class="col-2 card bg-light p-0 mx-3 mb-3 card-custom" style="max-width: 18rem;">
@@ -56,7 +61,16 @@ function getCityForecast(event) {
                     </div>
                 </div>`
                 $("#five-days").append(fiveDayForecast);
-    
+                
+                if (data.current.uvi <= 5) {
+                    $("#uv-index").addClass("favorable");
+                } else if (data.current.uvi > 5 && data.current.uvi < 8) {
+                    $("#uv-index").addClass("moderate");
+                } else if (data.current.uvi >= 8) {
+                    $("#uv-index").addClass("severe");
+                };
+
+                $("#uv-index").text(data.current.uvi);
             
        
 
