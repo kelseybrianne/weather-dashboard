@@ -10,16 +10,18 @@ function getCityForecast(event) {
     console.log("IT WORKED");
     var requestCurrentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
 
+    var today = moment().format("MM-DD-YYYY")
     
-  
     fetch(requestCurrentUrl)
-      .then(function (response) {
+    .then(function (response) {
         return response.json();
-      })
-      .then(function (data) {
+    })
+    .then(function (data) {
+        var lastUpdated = moment.unix(data.dt).format("h:mm A")
         var currentWeather = 
         `<div class="ml-3 mb-5 p-4 card bg-light text-dark text-white d-block today-custom">
-            <h5 class="card-title">${data.name}$</h5>
+            <h5 class="card-title">${data.name}</h5>
+            <h6 class="card-subtitle mb-3 text-muted">Last updated at ${lastUpdated} for ${today}</h6>
             <p class="card-text">Temp: ${data.main.temp}</p>
             <p class="card-text">Wind: ${data.wind.speed} MPH</p>
             <p class="card-text">Humidity: ${data.main.humidity}%</p>
@@ -33,8 +35,10 @@ function getCityForecast(event) {
 
         var lat = data.coord.lat
         var lon = data.coord.lon
-        console.log(lat + "," + lon);
+    
         var requestFiveDayURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=${APIKey}`;
+
+        
 
         // fetch(requestFiveDayURL)
 
