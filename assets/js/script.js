@@ -4,10 +4,9 @@ console.log ($("#city")); // Working
 var fetchButton = $("#fetch-button");
 
 function getCityForecast(event) {
-    var city = $("#city").val(); //Not working
-    console.log(city); // Not working   
+    var city = $("#city").val(); 
     event.preventDefault();
-    console.log("IT WORKED");
+    
     var requestCurrentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
 
     var today = moment().format("MM-DD-YYYY")
@@ -45,9 +44,9 @@ function getCityForecast(event) {
         })
         .then(function (data) {
        
-            for(var i=0; i<5;) {
+            for(var i=0; i<5; i++) {
                 var fiveDayForecast = 
-                `<div class="col-2 card bg-light p-0 mx-3 mr-3 card-custom" style="max-width: 18rem;">
+                `<div class="col-2 card bg-light p-0 mx-3 mb-3 card-custom" style="max-width: 18rem;">
                     <div class="card-header day">Header</div>
                     <div class="card-body">
                         <h5 class="card-title icon">Light card title</h5>
