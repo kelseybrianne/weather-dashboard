@@ -18,8 +18,18 @@ function getCityForecast(event) {
       })
       .then(function (data) {
         var currentWeather = 
-        ``
+        `<div class="ml-3 mb-5 p-4 card bg-light text-dark text-white d-block today-custom">
+            <h5 class="card-title">${data.name}$</h5>
+            <p class="card-text">Temp: ${data.main.temp}</p>
+            <p class="card-text">Wind: ${data.wind.speed} MPH</p>
+            <p class="card-text">Humidity: ${data.main.humidity}%</p>
+            <p class="card-text">UV Index: ${data.weather[0].description}</p>
+        </div>`
+        $("#weather-data").append(currentWeather)
 
+        var currentCity = 
+        `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false">${data.name}</button>`
+        $("#city-history").append(currentCity)
 
         var lat = data.coord.lat
         var lon = data.coord.lon
