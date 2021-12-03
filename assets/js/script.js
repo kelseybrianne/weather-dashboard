@@ -7,7 +7,7 @@ function getCityForecast(event) {
     var city = $("#city").val(); 
     event.preventDefault();
     
-    var requestCurrentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKey}`;
+    var requestCurrentUrl = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city}&appid=${APIKey}`;
 
     var today = moment().format("MM-DD-YYYY")
     
@@ -40,7 +40,7 @@ function getCityForecast(event) {
         var lat = data.coord.lat
         var lon = data.coord.lon
     
-        var requestFiveDayURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=${APIKey}`;
+        var requestFiveDayURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=${APIKey}&units=imperial`;
 
         
         fetch(requestFiveDayURL)
@@ -49,28 +49,30 @@ function getCityForecast(event) {
         })
         .then(function (data) {
             console.log(data);
+
+            if (data.current.uvi <= 5) {
+                $("#uv-index").addClass("favorable");
+            } else if (data.current.uvi > 5 && data.current.uvi < 8) {
+                $("#uv-index").addClass("moderate");
+            } else if (data.current.uvi >= 8) {
+                $("#uv-index").addClass("severe");
+            };
+            $("#uv-index").text(data.current.uvi);
+
             for(var i=0; i<5; i++) {
                 var fiveDayForecast = 
                 `<div class="col-2 card bg-light p-0 mx-3 mb-3 card-custom" style="max-width: 18rem;">
-                    <div class="card-header day">Header</div>
+                    <div class="card-header day">${moment.unix(data.daily[i].dt).format("dddd MM-DD")}</div>
                     <div class="card-body">
-                        <h5 class="card-title icon">Light card title</h5>
-                        <p class="card-text">Example text</p>
-                        <p class="card-text">Example text</p>
-                        <p class="card-text">Example text</p>
+                        <h5 class="card-title icon"></h5>
+                        <p class="card-text">${data.daily[i].temp.day}&#176F</p>
+                        <p class="card-text">${data.daily[i].wind_speed} MPH</p>
+                        <p class="card-text">${data.daily[i].humidity}%</p>
                     </div>
                 </div>`
                 $("#five-days").append(fiveDayForecast);
                 
-                if (data.current.uvi <= 5) {
-                    $("#uv-index").addClass("favorable");
-                } else if (data.current.uvi > 5 && data.current.uvi < 8) {
-                    $("#uv-index").addClass("moderate");
-                } else if (data.current.uvi >= 8) {
-                    $("#uv-index").addClass("severe");
-                };
 
-                $("#uv-index").text(data.current.uvi);
             
        
 
