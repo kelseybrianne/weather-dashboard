@@ -25,16 +25,16 @@ function getCityForecast(event) {
         
         // Add current weather to page for searched city
         var currentWeather = 
-        `<div class="ml-3 mb-5 p-4 card bg-light text-dark text-white d-block today-custom">
-        <img id="wicon" src="${iconURL}">
-        <h5 class="card-title">${data.name}</h5>
+        `<div class="ml-3 mb-5 p-4 card bg-light text-dark text-white d-block today-custom d-inline">
+        <h5 class="card-title">${data.name}  <img id="wicon" class="icon" src="${iconURL}"></h5>
+        
         <h6 class="card-subtitle mb-3 text-muted">Last updated at ${lastUpdated} for ${today}</h6>
         <p class="card-text">Temp: ${data.main.temp} &#176F</p>
         <p class="card-text">Wind: ${data.wind.speed} MPH</p>
         <p class="card-text">Humidity: ${data.main.humidity}%</p>
         <p style="display: inline" class="card-text">UV Index: </p>
         <p id="uv-index" class="rounded text-light p-2" style="display: inline"></p>
-        </div>`
+      </div>`
         $("#new-weather-data").append(currentWeather)
 
         console.log(iconURL);
@@ -71,7 +71,7 @@ function getCityForecast(event) {
                 var fiveDayForecast = 
                 `<div class="col-2 card bg-light p-0 mx-3 mb-3 card-custom" style="max-width: 18rem;">
                     <div class="card-header day">${moment.unix(data.daily[i].dt).format("ddd MM-DD")}</div>
-                    <div class="card-body">
+                    <div class="card-body pt-0">
                         <img id="wicon" src="http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png">
                         <p class="card-text">Temp: ${data.daily[i].temp.day}&#176F</p>
                         <p class="card-text">Wind: ${data.daily[i].wind_speed} MPH</p>

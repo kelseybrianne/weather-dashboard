@@ -30,3 +30,12 @@
 .severe {
     background-color: red;
 }
+
+.icon {
+    height: 4rem;
+}
+
+img {
+    padding: 0px;
+    margin: 0px;
+}
