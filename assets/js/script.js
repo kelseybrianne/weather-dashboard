@@ -73,7 +73,7 @@ var fetchData = function() {
             // Add five day forecast
             for(var i=1; i<6; i++) {
                 var fiveDayForecast = 
-                `<div class="col-2 card bg-light p-0 mx-3 mb-3 card-custom" style="max-width: 18rem;">
+                `<div class="col-sm-11 col-md-5 col-lg-2 card bg-light p-0 mx-2 mb-3 card-custom" style="max-width: 18rem;">
                 <div class="card-header day">${moment.unix(data.daily[i].dt).format("ddd MM-DD")}</div>
                 <div class="card-body pt-0">
                 <img id="wicon" src="http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png">
@@ -101,7 +101,7 @@ function getCityForecast(event) {
     event.preventDefault();
     
     // Get value of the city input
-    var city = $("#city").val(); 
+    var city = $("#city").val()
     
     requestCurrentUrl = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city}&appid=${APIKey}`;
     

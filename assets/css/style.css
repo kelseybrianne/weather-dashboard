@@ -39,3 +39,7 @@ img {
     padding: 0px;
     margin: 0px;
 }
+
+#city-history button{
+    text-transform: capitalize;
+}
