@@ -1,14 +1,12 @@
 var APIKey = "41200b32e10879046d4df40eb99353ec";
 
-function getCityForecast(event) {
-    event.preventDefault();
-    
-    // Get value of the city input
-    var city = $("#city").val(); 
-    
-    var requestCurrentUrl = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city}&appid=${APIKey}`;
-    
-    
+// var getCity = localStorage.getItem("city")
+
+// var currentCity = 
+// `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false" id="current-city" data-name="${getCity}">${getCity}</button>`
+// $("#city-history").append(currentCity)
+
+var fetchData = function() {
     fetch(requestCurrentUrl)
     .then(function (response) {
         return response.json();
@@ -40,10 +38,14 @@ function getCityForecast(event) {
         console.log(iconURL);
         
         // Add searched city to search history list
+        // Make array and render cities to page in a for loop
         var currentCity = 
-        `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false">${data.name}</button>`
+        `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false" id="current-city" data-name="${data.name}">${data.name}</button>`
         $("#city-history").append(currentCity)
 
+        localStorage.setItem(`city ${data.name}`, data.name);
+        
+        
         var lat = data.coord.lat
         var lon = data.coord.lon
         
@@ -55,7 +57,7 @@ function getCityForecast(event) {
         })
         .then(function (data) {
             console.log(data);
-
+            
             // Add UV Index for current weather from data in one call API
             if (data.current.uvi <= 5) {
                 $("#uv-index").addClass("favorable");
@@ -65,36 +67,59 @@ function getCityForecast(event) {
                 $("#uv-index").addClass("severe");
             };
             $("#uv-index").text(data.current.uvi);
-
+            
             // Add five day forecast
             for(var i=1; i<6; i++) {
                 var fiveDayForecast = 
                 `<div class="col-2 card bg-light p-0 mx-3 mb-3 card-custom" style="max-width: 18rem;">
-                    <div class="card-header day">${moment.unix(data.daily[i].dt).format("ddd MM-DD")}</div>
-                    <div class="card-body pt-0">
-                        <img id="wicon" src="http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png">
-                        <p class="card-text">Temp: ${data.daily[i].temp.day}&#176F</p>
-                        <p class="card-text">Wind: ${data.daily[i].wind_speed} MPH</p>
-                        <p class="card-text">Humidity: ${data.daily[i].humidity}%</p>
-                    </div>
+                <div class="card-header day">${moment.unix(data.daily[i].dt).format("ddd MM-DD")}</div>
+                <div class="card-body pt-0">
+                <img id="wicon" src="http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png">
+                <p class="card-text">Temp: ${data.daily[i].temp.day}&#176F</p>
+                <p class="card-text">Wind: ${data.daily[i].wind_speed} MPH</p>
+                <p class="card-text">Humidity: ${data.daily[i].humidity}%</p>
+                </div>
                 </div>`
                 $("#five-days").append(fiveDayForecast);
                 
             };     
             
+
             // From the <button> CONTAINER element, listen to the <button> "click"
-                
+            
                 // Get the city from the button's data attribute
             
-            // currentCity.on("click", function() {
-
-            //     city = data.name
-            //     getCityForecast();
                 
-            // });
+            });
         });
-    });
 };
+
+var requestCurrentUrl
+function getCityForecast(event) {
+    event.preventDefault();
+    
+    // Get value of the city input
+    var city = $("#city").val(); 
+    
+    requestCurrentUrl = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city}&appid=${APIKey}`;
+    
+    $(".today-custom").remove();
+    $(".card-custom").remove();
+    fetchData();
+    
+};
+
+$("#city-history").on("click", "button", function() {
+    
+
+    city = $("#current-city").attr("data-name");
+    // if (currentWeather) {
+        $(".today-custom").remove();
+        $(".card-custom").remove();
+    // }
+    fetchData();
+
+});
 
 // Add search city weather function on click
 $("#submit").submit(getCityForecast);
