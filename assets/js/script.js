@@ -1,10 +1,16 @@
 var APIKey = "41200b32e10879046d4df40eb99353ec";
+histArr = [];
 
-// var getCity = localStorage.getItem("city")
+var searchedCities = JSON.parse(localStorage.getItem("search-history"))
+if (searchedCities !== null) {
+    histArr = searchedCities;
+}
 
-// var currentCity = 
-// `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false" id="current-city" data-name="${getCity}">${getCity}</button>`
-// $("#city-history").append(currentCity)
+for (i=0; i<histArr.length; i++) {
+    var currentCity = 
+    `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false" id="current-city" data-name="${searchedCities[i]}">${searchedCities[i]}</button>`
+    $("#city-history").append(currentCity)
+}
 
 var fetchData = function() {
     fetch(requestCurrentUrl)
@@ -39,11 +45,7 @@ var fetchData = function() {
         
         // Add searched city to search history list
         // Make array and render cities to page in a for loop
-        var currentCity = 
-        `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false" id="current-city" data-name="${data.name}">${data.name}</button>`
-        $("#city-history").append(currentCity)
-
-        localStorage.setItem(`city ${data.name}`, data.name);
+    
         
         
         var lat = data.coord.lat
@@ -106,20 +108,32 @@ function getCityForecast(event) {
     $(".today-custom").remove();
     $(".card-custom").remove();
     fetchData();
+
+    histArr.push(city);
+    console.log(histArr);
+
+    localStorage.setItem("search-history", JSON.stringify(histArr));
+    $(".list-group-item").remove();
+    for (i=0; i<histArr.length; i++) {
+        var currentCity = 
+        `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false" id="current-city" data-name="${histArr[i]}">${histArr[i]}</button>`
+        $("#city-history").append(currentCity)
+    }
     
 };
 
-$("#city-history").on("click", "button", function() {
-    
+$("#city-history").on("click", "button", function(event) {
 
-    city = $("#current-city").attr("data-name");
-    // if (currentWeather) {
-        $(".today-custom").remove();
-        $(".card-custom").remove();
-    // }
+    city = $(event.target).attr("data-name");
+    $(".today-custom").remove();
+    $(".card-custom").remove();
+
+    requestCurrentUrl = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city}&appid=${APIKey}`;
+       
     fetchData();
-
 });
+        
+
 
 // Add search city weather function on click
 $("#submit").submit(getCityForecast);
