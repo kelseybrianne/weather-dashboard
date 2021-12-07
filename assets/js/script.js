@@ -29,7 +29,7 @@ var fetchData = function() {
         
         // Add current weather to page for searched city
         var currentWeather = 
-        `<div class="ml-3 mb-5 p-4 card bg-light text-dark text-white d-block today-custom d-inline">
+        `<div class="ml-3 mb-5 p-4 card bg-light text-dark d-block today-custom d-inline">
         <h5 class="card-title">${data.name}  <img id="wicon" class="icon" src="${iconURL}"></h5>
         
         <h6 class="card-subtitle mb-3 text-muted">Last updated at ${lastUpdated} for ${today}</h6>
@@ -73,7 +73,7 @@ var fetchData = function() {
             // Add five day forecast
             for(var i=1; i<6; i++) {
                 var fiveDayForecast = 
-                `<div class="col-sm-11 col-md-5 col-lg-2 card bg-light p-0 mx-2 mb-3 card-custom" style="max-width: 18rem;">
+                `<div class="col-sm-11 col-md-5 col-lg-2 card bg-dark text-light p-0 mx-2 mb-3 card-custom" style="max-width: 18rem;">
                 <div class="card-header day">${moment.unix(data.daily[i].dt).format("ddd MM-DD")}</div>
                 <div class="card-body pt-0">
                 <img id="wicon" src="http://openweathermap.org/img/wn/${data.daily[i].weather[0].icon}@2x.png">
@@ -109,14 +109,27 @@ function getCityForecast(event) {
     $(".card-custom").remove();
     fetchData();
 
+    // console.log(city)
+    // for (i=0; i<histArr.length; i++) {
+    //     console.log(histArr[i]);
+    //     if (city == histArr[i]) {
+    //         return;
+    //     } else {
+
+    //     }
+        
+    // }
     histArr.push(city);
+
     console.log(histArr);
 
     localStorage.setItem("search-history", JSON.stringify(histArr));
     $(".list-group-item").remove();
+
     for (i=0; i<histArr.length; i++) {
         var currentCity = 
-        `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false" id="current-city" data-name="${histArr[i]}">${histArr[i]}</button>`
+        `<button href="#" class="list-group-item list-group-item-action bg-light text-dark m-1 rounded" aria-current="false" id="current-city" data-name="${histArr[i]}">${histArr[i]}</button>`
+
         $("#city-history").append(currentCity)
     }
     
