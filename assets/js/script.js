@@ -1,11 +1,14 @@
 var APIKey = "41200b32e10879046d4df40eb99353ec";
 histArr = [];
+var requestCurrentUrl
 
+// Get the cities from local storage and put in array if it's not empty
 var searchedCities = JSON.parse(localStorage.getItem("search-history"))
 if (searchedCities !== null) {
     histArr = searchedCities;
 }
 
+// Render cities to the search history section in the form of a button
 for (i=0; i<histArr.length; i++) {
     var currentCity = 
     `<button href="#" class="list-group-item list-group-item-action m-1 rounded" aria-current="false" id="current-city" data-name="${searchedCities[i]}">${searchedCities[i]}</button>`
@@ -40,14 +43,7 @@ var fetchData = function() {
         <p id="uv-index" class="rounded text-light p-2" style="display: inline"></p>
       </div>`
         $("#new-weather-data").append(currentWeather)
-
-        console.log(iconURL);
-        
-        // Add searched city to search history list
-        // Make array and render cities to page in a for loop
-    
-        
-        
+          
         var lat = data.coord.lat
         var lon = data.coord.lon
         
@@ -82,29 +78,25 @@ var fetchData = function() {
                 <p class="card-text">Humidity: ${data.daily[i].humidity}%</p>
                 </div>
                 </div>`
-                $("#five-days").append(fiveDayForecast);
-                
+                $("#five-days").append(fiveDayForecast);   
             };     
-            
-
-            // From the <button> CONTAINER element, listen to the <button> "click"
-            
-                // Get the city from the button's data attribute
-            
-                
-            });
         });
+    });
 };
 
-var requestCurrentUrl
 function getCityForecast(event) {
     event.preventDefault();
     
     // Get value of the city input
     var city = $("#city").val()
+
+    if(city == "") {
+        return;
+    }
     
     requestCurrentUrl = `https://api.openweathermap.org/data/2.5/weather?units=imperial&q=${city}&appid=${APIKey}`;
     
+    // Clear the page or current data when displaying new city
     $(".today-custom").remove();
     $(".card-custom").remove();
     fetchData();
@@ -115,13 +107,10 @@ function getCityForecast(event) {
     //     if (city == histArr[i]) {
     //         return;
     //     } else {
-
     //     }
-        
     // }
-    histArr.push(city);
 
-    console.log(histArr);
+    histArr.push(city);
 
     localStorage.setItem("search-history", JSON.stringify(histArr));
     $(".list-group-item").remove();
@@ -135,6 +124,7 @@ function getCityForecast(event) {
     
 };
 
+// Add event listener to search history buttons to render that city to the page
 $("#city-history").on("click", "button", function(event) {
 
     city = $(event.target).attr("data-name");
@@ -145,8 +135,6 @@ $("#city-history").on("click", "button", function(event) {
        
     fetchData();
 });
-        
-
 
 // Add search city weather function on click
 $("#submit").submit(getCityForecast);
